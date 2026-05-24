@@ -1,2 +1,0 @@
-# NODO_TETRIS
-

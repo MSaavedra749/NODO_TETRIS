@@ -1,3 +1,0 @@
-//maincito
-//Rivero
-//prueba
