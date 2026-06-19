@@ -5,8 +5,6 @@
 #include <stdbool.h>
 
 
-#include <GBT/gbt.h>
-
 #define ORDEN_PIEZA 4
 
 

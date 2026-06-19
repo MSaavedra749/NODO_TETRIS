@@ -2,21 +2,21 @@
 #include "dibujo.h"
 #include "mEstados.h"
 #include <stdio.h>
-#include "GBT/gbt.h"
 #include "graficos.h"
 #include "tetris.h"
+#include "input.h"
 
 
 #define CANTIDAD_ELEMENTOS_MENU 5
 
 int pos_puntero = 0;
 
-eGBT_Tecla listaTeclas[10];
+Tecla listaTeclas[10];
 int cantTeclas = 0;
-eGBT_Tecla konamiCode[10] = {GBTK_ARRIBA, GBTK_ARRIBA, GBTK_ABAJO, GBTK_ABAJO, GBTK_IZQUIERDA, GBTK_DERECHA,
-                            GBTK_IZQUIERDA, GBTK_DERECHA, GBTK_b, GBTK_a};
+Tecla konamiCode[10] = {t_Arriba, t_Arriba, t_Abajo, t_Abajo, t_Izquierda, t_Derecha,
+                            t_Izquierda, t_Derecha, t_b, t_a};
 
-void shift_left(eGBT_Tecla*, int*, eGBT_Tecla);
+void shift_left(Tecla*, int*, Tecla);
 
 void prepararEstados(bool);
 
@@ -76,11 +76,11 @@ void loopLogicaMenu(){
     if(pos_puntero < inicio)
         pos_puntero = inicio;
 
-    eGBT_Tecla tecla = gbt_obtener_tecla_presionada();
+    Tecla tecla = obtenerTeclaPresionada();
 
     //cheat menu
     int coincidencias = 0;
-    if(tecla != GBTK_DESCONOCIDA){
+    if(tecla != t_Desconocida){
         shift_left(listaTeclas, &cantTeclas, tecla);
         if(cantTeclas == 10){
             for(int i = 0; i < 10; i++){
@@ -92,17 +92,17 @@ void loopLogicaMenu(){
             cambiar_contexto(PANTALLA_CHEATS);
     }
 
-    if(tecla == GBTK_ARRIBA)
+    if(tecla == t_Arriba)
     {
         pos_puntero -= 1;
         if(pos_puntero < inicio)
             pos_puntero = CANTIDAD_ELEMENTOS_MENU-1;
-    }else if(tecla == GBTK_ABAJO)
+    }else if(tecla == t_Abajo)
     {
         pos_puntero += 1;
         if(pos_puntero > CANTIDAD_ELEMENTOS_MENU-1)
             pos_puntero = inicio;
-    }else if(tecla == GBTK_ENTER)
+    }else if(tecla == t_Enter)
     {
         switch(pos_puntero)
         {
@@ -149,7 +149,7 @@ void prepararEstados(bool modo_dx)
     }
 }
 
-void shift_left(eGBT_Tecla* tecla, int* cant, eGBT_Tecla ent)
+void shift_left(Tecla* tecla, int* cant, Tecla ent)
 {
     if(cantTeclas < 10){
         tecla[*cant] = ent;

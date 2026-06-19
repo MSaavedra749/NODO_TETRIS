@@ -2,7 +2,7 @@
 #include "dibujo.h"
 #include "mEstados.h"
 #include "pMenu.h"
-#include <GBT/gbt_entrada.h>
+#include "input.h"
 #include <stdbool.h>
 #include <math.h>
 
@@ -30,48 +30,48 @@ void loop_dibujo_cheats()
     dibujar_rect(0, porc_a_pixel(12, pantalla->alto), (pantalla->ancho/2)-2, porc_a_pixel(76, pantalla->alto), 1);
     dibujar_texto("TRUCOS", 10, 25, 2, 0);
 
-    dibujar_texto("> ", 0, 40 + (5 * pos_marcadorC), 1, 0);
+    dibujar_texto("> ", 0, 40 + (5 * pos_marcadorC), 1 * pantalla->escala_v, 0);
     if(trucos.I_nfinita)
-        dibujar_texto("[:] I_Nfinita", 2, 40, 1, 0);
+        dibujar_texto("[:] I_Nfinita", 2, 40, 1 * pantalla->escala_v, 0);
     else
-        dibujar_texto("[;] I_Nfinita", 2, 40, 1, 0);
+        dibujar_texto("[;] I_Nfinita", 2, 40, 1 * pantalla->escala_v, 0);
     if(trucos.modo_lento)
-        dibujar_texto("[:] Gravedad Lunar", 2, 45, 1, 0);
+        dibujar_texto("[:] Gravedad Lunar", 2, 45, 1 * pantalla->escala_v, 0);
     else
-        dibujar_texto("[;] Gravedad Lunar", 2, 45, 1, 0);
+        dibujar_texto("[;] Gravedad Lunar", 2, 45, 1 * pantalla->escala_v, 0);
     if(trucos.shaker)
-        dibujar_texto("[:] T_Rremoto", 2, 50, 1, 0);
+        dibujar_texto("[:] T_Rremoto", 2, 50, 1 * pantalla->escala_v, 0);
     else
-        dibujar_texto("[;] T_Rremoto", 2, 50, 1, 0);
+        dibujar_texto("[;] T_Rremoto", 2, 50, 1 * pantalla->escala_v, 0);
     if(trucos.invisible)
-        dibujar_texto("[:] Fe Ciega", 2, 55, 1, 0);
+        dibujar_texto("[:] Apagon", 2, 55, 1 * pantalla->escala_v, 0);
     else
-        dibujar_texto("[;] Fe Ciega", 2, 55, 1, 0);
+        dibujar_texto("[;] Apagon", 2, 55, 1 * pantalla->escala_v, 0);
     if(trucos.turbo)
-        dibujar_texto("[:] Hiperespacio", 2, 60, 1, 0);
+        dibujar_texto("[:] Hiperespacio", 2, 60, 1 * pantalla->escala_v, 0);
     else
-        dibujar_texto("[;] Hiperespacio", 2, 60, 1, 0);
+        dibujar_texto("[;] Hiperespacio", 2, 60, 1 * pantalla->escala_v, 0);
     if(trucos.invertido)
-        dibujar_texto("[:] Efecto Coriolis", 2, 65, 1, 0);
+        dibujar_texto("[:] Anti-Gravedad", 2, 65, 1 * pantalla->escala_v, 0);
     else
-        dibujar_texto("[;] Efecto Coriolis", 2, 65, 1, 0);
+        dibujar_texto("[;] Anti-Gravedad", 2, 65, 1 * pantalla->escala_v, 0);
     //dibujar_texto("> [:] test1",0, 40, 1, 0);
     //dibujar_texto("  [;] test2", 0, 45, 1, 0);
     return;
 }
 
 void loop_logica_cheats(){
-    eGBT_Tecla tecla = gbt_obtener_tecla_presionada();
+    Tecla tecla = obtenerTeclaPresionada();
 
-    if(tecla == GBTK_ARRIBA){
+    if(tecla == t_Arriba){
         pos_marcadorC -= 1;
         pos_marcadorC = (pos_marcadorC + 6) % 6;
     }
-    if(tecla == GBTK_ABAJO){
+    if(tecla == t_Abajo){
         pos_marcadorC += 1;
         pos_marcadorC = (pos_marcadorC + 6) % 6;
     }
-    if(tecla == GBTK_ENTER){
+    if(tecla == t_Enter){
         switch(pos_marcadorC){
             case 0:
                 trucos.I_nfinita = !trucos.I_nfinita;
@@ -93,7 +93,7 @@ void loop_logica_cheats(){
         }
     }
 
-    if(tecla == GBTK_ESCAPE){
+    if(tecla == t_Escape){
         cambiar_contexto(PANTALLA_MENU);
     }
     return;

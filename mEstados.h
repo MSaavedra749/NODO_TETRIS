@@ -2,6 +2,7 @@
 #define MESTADOS_H_INCLUDED
 #include <stdbool.h>
 #include "dibujo.h"
+#include <SDL3/SDL.h>
 
 #define TAMANIO_NOMBRE 10
 
@@ -42,12 +43,14 @@ typedef struct{
     Escena escenaPausa;
     Escena escenaCheats;
     Escena *escenaActual;
-    char nombreActual[10]; //Por el momento determinamos un rango "alto"
+    char nombreActual[TAMANIO_NOMBRE]; //Por el momento determinamos un rango "alto"
     int tamanioNombre;
     bool modo_tetris;
+    SDL_Window* window;
+    SDL_Renderer* renderer;
 }Context;
 
-Context* inicializar_contexto();
+Context* inicializar_contexto(SDL_Window* window, SDL_Renderer* renderer);
 
 extern Context* contexto;
 

@@ -2,7 +2,7 @@
 #include "dibujo.h"
 #include "pNombre.h"
 #include "graficos.h"
-#include "GBT/gbt_entrada.h"
+#include "input.h"
 #include "mEstados.h"
 #include <math.h>
 #include <stdio.h>
@@ -25,37 +25,37 @@ void dibujar_pantalla_nombre(){
 
 ///Por el momento solo toma nombres en minuscula, y por el momento no se acepta espacios
 void loop_pantalla_nombre(){
-    eGBT_Tecla tecla = gbt_obtener_tecla_presionada();
+    Tecla tecla = obtenerTeclaPresionada();
     char* pchar = contexto->nombreActual + contexto->tamanioNombre;
     char letra;
 
-    if(tecla == GBTK_ESCAPE){
+    if(tecla == t_Escape){
         printf("Esto hay que sacarlo\n");
         cambiar_contexto(PANTALLA_SPLASH);
     }
     if( contexto->tamanioNombre < 10)
     {
-        if(tecla >= GBTK_a && tecla <= GBTK_z)
+        if(tecla >= t_a && tecla <= t_z)
         {
-            letra = tecla - GBTK_a + 'a';
+            letra = tecla - t_a + 'a';
             *pchar = letra;
             pchar++;
             contexto->tamanioNombre++;
         }
-        if(tecla >= GBTK_0 && tecla <= GBTK_9)
+        if(tecla >= t_0 && tecla <= t_9)
         {
-            letra = tecla - GBTK_0 + '0';
+            letra = tecla - t_0 + '0';
             *pchar = letra;
             pchar++;
             contexto->tamanioNombre++;
         }
     }
-    if(tecla == GBTK_RETROCESO && contexto->tamanioNombre > 0)
+    if(tecla == t_Retroceso && contexto->tamanioNombre > 0)
     {
         pchar--;
         contexto->tamanioNombre--;
     }
-    if(tecla == GBTK_ENTER && contexto->tamanioNombre > 0)
+    if(tecla == t_Enter && contexto->tamanioNombre > 0)
     {
         cambiar_contexto(PANTALLA_MENU);
         return;

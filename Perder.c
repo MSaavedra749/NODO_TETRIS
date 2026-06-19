@@ -1,5 +1,5 @@
 #include "Perder.h"
-#include "GBT/gbt_entrada.h"
+#include "input.h"
 #include "dibujo.h"
 #include "graficos.h"
 #include "mEstados.h"
@@ -90,17 +90,17 @@ void loop_logica_perder()
         contexto->escenaPerdiste.contador++;
     }
 
-    eGBT_Tecla tecla = gbt_obtener_tecla_presionada();
+    Tecla tecla = obtenerTeclaPresionada();
 
-    if(tecla == GBTK_ARRIBA){
+    if(tecla == t_Arriba){
         pos_punteroG -= 1;
         pos_punteroG = (pos_punteroG + 2) % 2;
     }
-    if(tecla == GBTK_ABAJO){
+    if(tecla == t_Abajo){
         pos_punteroG += 1;
         pos_punteroG = (pos_punteroG + 2) % 2;
     }
-    if(tecla == GBTK_ENTER){
+    if(tecla == t_Enter){
         limpiar_tetris();
         limpiarLB(contexto->modo_tetris, obtener_dificultad_actual());
         remove("partida.bin");

@@ -5,6 +5,7 @@
 #include "piezas.h"
 #include "tda_vector.h"
 #include <time.h>
+#include "input.h"
 
 #define SENTIDO_ANTIHORARIO 0
 #define SENTIDO_HORARIO 1
@@ -80,7 +81,7 @@ void loop_logica_tetris();
 
 //
 void rotar_pieza_activa(uint8_t sentido);
-void mover_pieza(eGBT_Tecla tecla);
+void mover_pieza(Tecla tecla);
 bool procesar_caida();
 void calculo_puntos(int lineas_borradas);
 void obtener_nueva_pieza();

@@ -1,11 +1,11 @@
 #include "dibujo.h"
-#include "GBT/gbt_graficos.h"
+#include "opciones.h"
+#include <SDL3/SDL_render.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "graficos.h"
-#include <string.h>
 
 #define TAMANIO_MINO 4.0
 
@@ -43,16 +43,27 @@ void semilla_fondo(double time){
     pantalla->time = time;
 }
 
+void dibujarPixel(int x, int y, int col)
+{
+    if(col != CANT_COLOR -1){
+        colorRGB c = obtener_color(col);
+        SDL_SetRenderDrawColor(contexto->renderer, c.r, c.g, c.b, 0x00);
+        SDL_RenderPoint(contexto->renderer, x, y);
+    }
+}
+
 void dibujar_rect(int x, int y, int w, int h, uint8_t col){
     for(int i = x; i <= x + w; i++){
         for(int j = y; j <= y + h; j++){
-            gbt_dibujar_pixel(i, j, col);
+            dibujarPixel(i, j, col);
         }
     }
 }
 
 void limpiar(uint8_t col){
-    gbt_borrar_backbuffer(col);
+    colorRGB c = obtener_color(col);
+    SDL_SetRenderDrawColor(contexto->renderer, c.r, c.g, c.b, 0x00);
+    SDL_RenderClear(contexto->renderer);
 }
 
 void dibujar_fondo(){
@@ -97,7 +108,7 @@ void dibujar_spr_porc(car16 *spr, int sprSzX, int sprSzY, float porcX, float por
             if(srcX < sprSzX && srcY < sprSzY){
                 col = spr->mapa[srcY][srcX];
                 if(col!=0){
-                    gbt_dibujar_pixel(x, y, spr->colores[col]);
+                    dibujarPixel(x, y, spr->colores[col]);
                 }
             }
 
@@ -113,9 +124,9 @@ void dibujar_spr_mono_porc(uint8_t *spr, int sprSzX, int sprSzY, float porcX, fl
             int srcX = (x-offX) / escala;
             int srcY = (y-offY) / escala;
             if(spr[(srcY * sprSzY) + srcX] == 1){
-                gbt_dibujar_pixel(x, y, col);
+                dibujarPixel(x, y, col);
             }else{
-                gbt_dibujar_pixel(x,y, colBG);
+                dibujarPixel(x,y, colBG);
             }
         }
     }
@@ -154,7 +165,7 @@ void dibujar_mino(uint8_t tab_x, uint8_t tab_y, uint8_t col, bool dither)
                 for(int y = inicio_y; y < inicio_y + escala; y++){
                     if(dither && (y%3)!=0)
                         continue;
-                    gbt_dibujar_pixel(x, y, color);
+                    dibujarPixel(x, y, color);
 
                 }
             }
@@ -176,7 +187,7 @@ void dibujar_mino_pantalla(int pos_x, int pos_y, int col)
             {
                 for(int y = inicio_y; y < inicio_y + escala; y++)
                 {
-                    gbt_dibujar_pixel(x,y,color);
+                    dibujarPixel(x,y,color);
                 }
             }
         }
@@ -336,7 +347,7 @@ void dibujar_filtro_pausa(uint8_t col)
         {
             if((x + y) % 2 == 0)
             {
-                gbt_dibujar_pixel(x,y,col);
+                dibujarPixel(x,y,col);
             }
         }
     }
@@ -348,7 +359,7 @@ void dibujar_filtro_dither(uint8_t col)
     for(int x = 0; x < pantalla->ancho; x++){
         for(int y = 0; y < pantalla->alto; y++){
             if((x%2) == (y%2)){
-                gbt_dibujar_pixel(x, y, col);
+                dibujarPixel(x, y, col);
             }
         }
     }
@@ -358,12 +369,14 @@ void invertir_pantalla()
 {
     for(int y = 0; y < pantalla->alto/2; y++){
         for(int x = 0; x < pantalla->ancho; x++){
-            int color_sup = gbt_obtener_color_pixel(x, y);
-            int color_inf = gbt_obtener_color_pixel(x, pantalla->alto - 1 - y);
+            int color_sup = 0;
+            int color_inf = 0;
+            //int color_sup = gbt_obtener_color_pixel(x, y);
+            //int color_inf = gbt_obtener_color_pixel(x, pantalla->alto - 1 - y);
             //printf("Color superior: %d, Color inferior: %d\n",color_sup, color_inf);
 
-            gbt_dibujar_pixel(x, y, color_inf);
-            gbt_dibujar_pixel(x, pantalla->alto - 1 - y, color_sup);
+            dibujarPixel(x, y, color_inf);
+            dibujarPixel(x, pantalla->alto - 1 - y, color_sup);
         }
     }
 }

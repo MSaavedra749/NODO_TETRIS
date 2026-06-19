@@ -23,11 +23,19 @@ typedef struct{
     double time;
 }Pantalla;
 
+typedef struct{
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+}colorRGB;
+
 Pantalla* inicializar_helper_dibujo(int ancho, int alto, int escala_v);
 
 extern Pantalla* pantalla;
 
 void semilla_fondo(double);
+
+void dibujarPixel(int x, int y, int col);
 
 void dibujar_rect(int x, int y, int w, int h, uint8_t col);
 void limpiar(uint8_t col);

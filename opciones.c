@@ -1,10 +1,8 @@
 #include "opciones.h"
-#include "GBT/gbt_entrada.h"
-#include "GBT/gbt.h"
-#include "GBT/gbt_graficos.h"
 #include "dibujo.h"
-#include <string.h>
 #include <stdio.h>
+#include <SDL3/SDL.h>
+#include "input.h"
 
 static char* paletas[] = {"CLASICA", "GAMEBOY", "NEON"};
 static char* velocidades[] = {"Facil","Normal","Dificil"};
@@ -19,8 +17,8 @@ static void modificar_valor_horizontal(int direccion);
 Configuracion config_actual;
 
 //Paletas de colores
-#define CANT_COLOR 30
-tGBT_ColorRGB colorDefault[CANT_COLOR] = {
+
+colorRGB colorDefault[CANT_COLOR] = {
     {0xFF, 0xFF, 0xFF},     //0-blanco
     {0x00, 0x00, 0x00},     //1-negro
     {0xFA, 0xFA, 0xFA},     //2-Casi blanco
@@ -53,7 +51,7 @@ tGBT_ColorRGB colorDefault[CANT_COLOR] = {
     {0xFF, 0xFF, 0xFF}      //29-Transparente
 };
 
-tGBT_ColorRGB colorGameboy[CANT_COLOR] = {
+colorRGB colorGameboy[CANT_COLOR] = {
     {0xFF, 0xFF, 0xFF},     //0-blanco
     {0x00, 0x00, 0x00},     //1-negro
     {0xFA, 0xFA, 0xFA},     //2-Casi blanco
@@ -86,7 +84,7 @@ tGBT_ColorRGB colorGameboy[CANT_COLOR] = {
     {0xFF, 0xFF, 0xFF}      //29-Transparente
 };
 
-tGBT_ColorRGB colorNeon[CANT_COLOR] = {
+colorRGB colorNeon[CANT_COLOR] = {
     {0xFF, 0xFF, 0xFF},     //0-blanco
     {0x00, 0x00, 0x00},     //1-negro
     {0xFA, 0xFA, 0xFA},     //2-Casi blanco
@@ -193,17 +191,17 @@ void dibujar_opciones()
 
 void loop_opciones()
 {
-    eGBT_Tecla tecla = gbt_obtener_tecla_presionada();
+    Tecla tecla = obtenerTeclaPresionada();
 
     ///Navegacion Vertical
 
-    if(tecla == GBTK_ARRIBA)
+    if(tecla == t_Arriba)
     {
         if(opcion_selec == 5)
             opcion_selec = 4;
         opcion_selec = (opcion_selec - 1 + 5)%5;
     }
-    else if(tecla == GBTK_ABAJO)
+    else if(tecla == t_Abajo)
     {
         if(opcion_selec == 5)
             opcion_selec = 4;
@@ -212,7 +210,7 @@ void loop_opciones()
 
     ///Navegacion Horizontal
 
-    else if(tecla == GBTK_DERECHA)
+    else if(tecla == t_Derecha)
     {
         modificar_valor_horizontal(DERECHA);
         if(opcion_selec == 5)
@@ -220,7 +218,7 @@ void loop_opciones()
         else if(opcion_selec == 4)
             opcion_selec = 5;
     }
-    else if(tecla == GBTK_IZQUIERDA)
+    else if(tecla == t_Izquierda)
     {
         modificar_valor_horizontal(IZQUIERDA);
         if(opcion_selec == 5)
@@ -229,7 +227,7 @@ void loop_opciones()
             opcion_selec = 5;
     }
 
-    else if(tecla == GBTK_ENTER)
+    else if(tecla == t_Enter)
     {
         if(opcion_selec == 4)
         {
@@ -238,7 +236,7 @@ void loop_opciones()
         else if(opcion_selec == 5)
         {
             guardar_configuraciones(ARCHIVO_OP);
-            aplicar_cambios_graficos();
+            aplicar_cambios_graficos(contexto->window);
             cambiar_contexto(PANTALLA_MENU);
         }
     }
@@ -291,27 +289,39 @@ int obtener_dificultad_actual()
 ////////////////////////////////////////////////7
 //Por el momento es aux
 
-void aplicar_cambios_graficos()
+void aplicar_cambios_graficos(SDL_Window *window)
 {
     limpiar_helper_pantalla();
-    gbt_destruir_ventana();
+    //gbt_destruir_ventana();
 
     int ancho = obtener_ancho_actual();
     int alto = obtener_alto_actual();
 
     int escala = (ancho == 640) ? 2:1;
 
+    SDL_SetWindowSize(window, ancho, alto);
     //Aca deberiamos checkear que la memoria dinamica se genere correctamente
-    gbt_crear_ventana("Soy un cambio", ancho, alto, config_actual.escala_ventana);
-    aplicar_paleta();
+    //gbt_crear_ventana("Soy un cambio", ancho, alto, config_actual.escala_ventana);
+    //aplicar_paleta();
     inicializar_helper_dibujo(ancho, alto,escala);
 }
 
-void aplicar_paleta(){
+/*void aplicar_paleta(){
     if(config_actual.paleta_elegida == 0)
         gbt_aplicar_paleta(colorDefault, CANT_COLOR, GBT_FORMATO_888);
     if(config_actual.paleta_elegida == 1)
         gbt_aplicar_paleta(colorGameboy, CANT_COLOR, GBT_FORMATO_888);
     if(config_actual.paleta_elegida == 2)
         gbt_aplicar_paleta(colorNeon, CANT_COLOR, GBT_FORMATO_888);
+        }*/
+colorRGB obtener_color(int ind)
+{
+    if(config_actual.paleta_elegida == 0)
+        return colorDefault[ind];
+    else if(config_actual.paleta_elegida == 1)
+        return colorGameboy[ind];
+    else if(config_actual.paleta_elegida == 2)
+        return colorNeon[ind];
+    else
+        return (colorRGB){0x00, 0x00, 0x00};
 }

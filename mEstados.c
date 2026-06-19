@@ -1,7 +1,8 @@
 #include "mEstados.h"
+#include <SDL3/SDL_render.h>
+#include <SDL3/SDL_video.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "GBT/gbt_entrada.h"
 #include "dibujo.h"
 #include "splash.h"
 #include <stdio.h>
@@ -15,10 +16,11 @@
 #include "Pausa.h"
 #include <time.h>
 #include "cheats.h"
+#include "input.h"
 
 Context* contexto = NULL;
 
-Context* inicializar_contexto(){
+Context* inicializar_contexto(SDL_Window* window, SDL_Renderer* renderer){
     contexto = malloc(sizeof(Context));
     if(contexto == NULL){
         fprintf(stderr, "Error al solicitar memoria para contexto\n");
@@ -28,6 +30,8 @@ Context* inicializar_contexto(){
 
     //Cargamos los archivos
     //cargar_crear_archivo(ARCHIVO_OP);
+    contexto->window = window;
+    contexto->renderer = renderer;
 
     contexto->estadoActual = PANTALLA_SPLASH;
     contexto->corriendo = true;
@@ -63,16 +67,16 @@ Context* inicializar_contexto(){
     //Relacionado a pantalla pausa
     contexto->escenaPausa.dibujar_escena = loop_dibujar_pausa;
     contexto->escenaPausa.loop_escena = loop_logica_pausa;
-
+    
     //aca pantalla cheats
     contexto->escenaCheats.dibujar_escena = loop_dibujo_cheats;
     contexto->escenaCheats.loop_escena = loop_logica_cheats;
-
+    
     return contexto;
 }
 
 void correr(){
-    gbt_procesar_entrada();
+    actualizar_input();
     contexto->escenaActual->loop_escena();
     contexto->escenaActual->dibujar_escena();
 }
@@ -104,17 +108,6 @@ void cambiar_contexto(eEstadoJuego siguienteEstado){
                 contexto->escenaActual = &contexto->escenaMenu;
                 break;
             case PANTALLA_TETRIS:
-                contexto->escenaActual = &contexto->escenaTetris;
-                break;
-            case PANTALLA_DELUXE:   //La pantalla deluxe no va mas
-                if(!tetris)
-                {
-                    if(!inicializar_tetris(true))
-                    {
-                        printf("Error al inicializar el tetris\n");
-                        contexto->corriendo = false;
-                    }
-                }
                 contexto->escenaActual = &contexto->escenaTetris;
                 break;
             case PANTALLA_CHEATS:

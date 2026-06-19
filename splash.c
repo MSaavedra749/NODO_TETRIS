@@ -1,9 +1,9 @@
 #include "splash.h"
-#include "GBT/gbt_entrada.h"
 #include "dibujo.h"
 #include "mEstados.h"
 #include <stdio.h>
 #include "graficos.h"
+#include "input.h"
 
 void dibujar_splash(){
     limpiar(7);
@@ -24,10 +24,10 @@ void dibujar_splash(){
 }
 
 void loop_splash(){
-    eGBT_Tecla tecla = gbt_obtener_tecla_presionada();
-    if(tecla == GBTK_ESCAPE){
+    Tecla tecla = obtenerTeclaPresionada();
+    if(tecla == t_Escape){
         contexto->corriendo = false;
-    }else if(tecla != GBTK_DESCONOCIDA){
+    }else if(tecla != t_Desconocida){
         printf("Pasando a eleccion de nombre\n");
         cambiar_contexto(PANTALLA_NOMBRE);
     }

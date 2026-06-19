@@ -1,6 +1,6 @@
 #include "tetris.h"
 #include <stdlib.h>
-#include "GBT/gbt_entrada.h"
+#include "input.h"
 #include "cheats.h"
 #include "dibujo.h"
 #include "graficos.h"
@@ -13,7 +13,7 @@
 
 int framesTecla = 0;
 int framesAbajo = 0;
-eGBT_Tecla ultimaTecla;
+Tecla ultimaTecla;
 
 Tetris* tetris = NULL;
 
@@ -275,41 +275,34 @@ void loop_logica_tetris()
     }
     else
     {
-        eGBT_Tecla tecla = gbt_obtener_tecla_presionada();
+        Tecla tecla = obtenerTeclaPresionada();
         //////////
         //Caso de HARD DROP anclamos la pieza en la pposiccion de prediccion (Hace que la pieza se dispare de una al tablero?)
-        if(tecla == GBTK_ESPACIO){
+        if(tecla == t_Espacio){
             tetris->pieza = tetris->piezaFutura;
             anclar_pieza(&tetris->tablero, &tetris->pieza, tetris->modo_dx);
             procesar_impacto();
         }
 
-
-        /*if(tecla == GBTK_ESCAPE)
-        {
-            //printf("Volver a pantalla inicial\n");    Ahora vuelve al menu
-            cambiar_contexto(PANTALLA_MENU);
-            return;
-            }*/
-        if(tecla == GBTK_p || tecla == GBTK_ESCAPE)
+        if(tecla == t_p || tecla == t_Escape)
         {
             //printf("Tecla P apretada\n");
             cambiar_contexto(PANTALLA_PAUSA);
             return;
         }
 
-        if(tecla == GBTK_x)
+        if(tecla == t_x)
         {
             rotar_pieza_activa(SENTIDO_HORARIO);
         }
-        if(tecla == GBTK_z)
+        if(tecla == t_z)
         {
             rotar_pieza_activa(SENTIDO_ANTIHORARIO);
         }
-        if(tecla == GBTK_TAB)
+        /*if(tecla == GBTK_TAB)
         {
             tetris->puntos += 1000;
-        }
+        }*/
 
         mover_pieza(tecla);
 
@@ -402,26 +395,15 @@ void rotar_pieza_activa(uint8_t sentido)
 
 }
 
-void mover_pieza(eGBT_Tecla tecla)
+void mover_pieza(Tecla tecla)
 {
     int x = 0;
     int y = 0;
 
-    if(gbt_tecla_sostenida(GBTK_DERECHA))
+    if(obtenerTeclaSostenida(t_Derecha))
     {
-        if(ultimaTecla != GBTK_DERECHA){
-            ultimaTecla = GBTK_DERECHA;
-            framesTecla = 0;
-        }
-        if(framesTecla == 0)
-            x=1;
-        framesTecla++;
-        if(framesTecla>9)
-            framesTecla=0;
-    }else if(gbt_tecla_sostenida(GBTK_IZQUIERDA))
-    {
-        if(ultimaTecla != GBTK_IZQUIERDA){
-            ultimaTecla = GBTK_IZQUIERDA;
+        if(ultimaTecla != t_Derecha){
+            ultimaTecla = t_Derecha;
             framesTecla = 0;
         }
         if(framesTecla == 0)
@@ -429,10 +411,21 @@ void mover_pieza(eGBT_Tecla tecla)
         framesTecla++;
         if(framesTecla>9)
             framesTecla=0;
+    }else if(obtenerTeclaSostenida(t_Izquierda))
+    {
+        if(ultimaTecla != t_Izquierda){
+            ultimaTecla = t_Izquierda;
+            framesTecla = 0;
+        }
+        if(framesTecla == 0)
+            x=1;
+        framesTecla++;
+        if(framesTecla>9)
+            framesTecla=0;
     }else
         framesTecla = 0;
 
-    if(gbt_tecla_sostenida(GBTK_ABAJO))
+    if(obtenerTeclaSostenida(t_Abajo))
     {
         if(framesAbajo==0)
             y=1;

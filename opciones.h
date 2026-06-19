@@ -1,5 +1,6 @@
 #ifndef OPCIONES_H_INCLUDED
 #define OPCIONES_H_INCLUDED
+#include <SDL3/SDL.h>
 
 #include "dibujo.h"
 #include "mEstados.h"
@@ -7,6 +8,7 @@
 #define IZQUIERDA -1
 #define DERECHA 1
 
+#define CANT_COLOR 30
 
 typedef struct
 {
@@ -31,11 +33,12 @@ int obtener_ancho_actual();
 int obtener_alto_actual();
 int obtener_escala_actual();
 int obtener_ancho_dx();
-void aplicar_paleta();
+//void aplicar_paleta();
 int obtener_dificultad_actual();
+colorRGB obtener_color(int ind);
 
 ///Por el momento es medio auxiliar
-void aplicar_cambios_graficos();
+void aplicar_cambios_graficos(SDL_Window* window);
 
 
 #endif // OPCIONES_H_INCLUDED

@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include <GBT/gbt.h>
 #include "piezas.h"
 #include "dibujo.h"
 

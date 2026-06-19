@@ -1,5 +1,5 @@
 #include "Pausa.h"
-#include "GBT/gbt_entrada.h"
+#include "input.h"
 #include "dibujo.h"
 #include "graficos.h"
 #include "mEstados.h"
@@ -63,18 +63,18 @@ void loop_dibujar_pausa()
 
 void loop_logica_pausa()
 {
-    eGBT_Tecla tecla = gbt_obtener_tecla_presionada();
+    Tecla tecla = obtenerTeclaPresionada();
 
     //Puntero menu
-    if(tecla == GBTK_ARRIBA){
+    if(tecla == t_Arriba){
         pos_punteroP -= 1;
         pos_punteroP = (pos_punteroP + CANTIDAD_ELEMENTOS_MENU) % CANTIDAD_ELEMENTOS_MENU;
     }
-    if(tecla == GBTK_ABAJO){
+    if(tecla == t_Abajo){
         pos_punteroP += 1;
         pos_punteroP = (pos_punteroP + CANTIDAD_ELEMENTOS_MENU) % CANTIDAD_ELEMENTOS_MENU;
     }
-    if(tecla == GBTK_ENTER){
+    if(tecla == t_Enter){
         switch(pos_punteroP){
             case 0:
                 cambiar_contexto(PANTALLA_TETRIS);

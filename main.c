@@ -1,6 +1,6 @@
+#include <SDL3/SDL_render.h>
 #include <stdio.h>
-#include "GBT/gbt.h"
-#include "GBT/gbt_graficos.h"
+#include <SDL3/SDL.h>
 #include "cheats.h"
 #include "mEstados.h"
 #include <stdbool.h>
@@ -44,29 +44,25 @@ int main(int argc, char* argv[])
     ESCALA_VENTANA = obtener_escala_actual();
 
     //
-    // inicializacion sistema GBT
+    // inicializacion SDL
     //
-    if(gbt_iniciar() != 0){
-        fprintf(stderr, "Error al iniciar GBT: %s", gbt_obtener_log());
-        return -1;
-    }
-    char nombreVentana[128];
-    sprintf(nombreVentana,"Tetris_NODO");
-    if(gbt_crear_ventana(nombreVentana, ANCHO_VENTANA, ALTO_VENTANA, ESCALA_VENTANA) != 0){
-        fprintf(stderr, "Error al crear ventana: %s", gbt_obtener_log());
-        return -1;
+    SDL_Init(SDL_INIT_VIDEO);
+
+    SDL_Window* window;
+    SDL_Renderer* renderer;
+
+    if(!SDL_CreateWindowAndRenderer("NODO TETRIS", ANCHO_VENTANA, ALTO_VENTANA, SDL_WINDOW_OPENGL, &window, &renderer)){
+        printf("Error al crear ventana y renderizador SDL\n");
+        SDL_Quit();
+        return 1;
     }
 
-    aplicar_paleta();
-    /*if(gbt_aplicar_paleta(color, CANT_COLOR, GBT_FORMATO_888) != 0){
-        fprintf(stderr, "Error al aplicar paleta %s\n", gbt_obtener_log());
-        return -1;
-        }   //Paleta inicial*/
+    //aplicar_paleta();
 
     //
     // entorno juego
     //
-    if(inicializar_contexto() == NULL){
+    if(inicializar_contexto(window, renderer) == NULL){
         printf("Error al crear contexto\n");
         return -1;
     }
@@ -76,12 +72,14 @@ int main(int argc, char* argv[])
     }
     srand(time(NULL));
 
+    // <- ACA
     inicializarLeaderboard();
     if(!cargarArchivo()){
         printf("Error al cargar archivo de estadisticas\n");
         return -1;
     }
 
+    //      <- ACA
     inicializar_cheats();
 
     semilla_fondo(time(NULL));
@@ -90,16 +88,17 @@ int main(int argc, char* argv[])
 
         correr();
 
-        gbt_volcar_backbuffer();
-        gbt_esperar(16);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(16);
     }
 
     //Funciones de cierre
     guardarArchivo();
     limpiar_contexto();
     limpiar_helper_pantalla();
-    gbt_destruir_ventana();
-    gbt_cerrar();
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
+    SDL_Quit();
 
     return 0;
 }
