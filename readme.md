@@ -1,9 +1,7 @@
 # NODO_TETRIS
 Implementación del juego Tetris en C utilizando SDL3.
 
-
-
-> El juego ya está listo para ejecutar.
+>Basado en un proyecto universitario con una libreria privada y porteado a SDL3
 
 ## Configuración del juego
 Desde el menú principal se puede acceder a un menú gráfico de configuración.
