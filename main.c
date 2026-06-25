@@ -8,6 +8,7 @@
 #include "opciones.h"
 #include <time.h>
 #include "puntos.h"
+#include "sonido.h"
 
 int main(int argc, char* argv[])
 {
@@ -72,15 +73,18 @@ int main(int argc, char* argv[])
     }
     srand(time(NULL));
 
-    // <- ACA
+    
     inicializarLeaderboard();
     if(!cargarArchivo()){
         printf("Error al cargar archivo de estadisticas\n");
         return -1;
     }
 
-    //      <- ACA
+    
     inicializar_cheats();
+
+    audio_init();
+    
 
     semilla_fondo(time(NULL));
     //bucle principal

@@ -10,6 +10,7 @@
 #include "mEstados.h"
 #include "opciones.h"
 #include <stdio.h>
+#include "sonido.h"
 
 int framesTecla = 0;
 int framesAbajo = 0;
@@ -288,6 +289,7 @@ void loop_logica_tetris()
         {
             //printf("Tecla P apretada\n");
             cambiar_contexto(PANTALLA_PAUSA);
+            audio_switch_loop();
             return;
         }
 
@@ -324,6 +326,7 @@ void loop_logica_tetris()
                 sprintf(actual.nombre, "%s", contexto->nombreActual);
                 cargarLB(tetris->modo_dx, obtener_dificultad_actual(), &actual);
                 contexto->modo_tetris = tetris->modo_dx;
+                audio_switch_loop();
                 cambiar_contexto(PANTALLA_PERDER);
                 return;
             }
@@ -574,6 +577,7 @@ void procesar_impacto()
     {
         tetris->animacion_borrar = true;
         tetris->frames_animacion = 0;
+        audio_play_cue("Sonidos/sound.wav");
     }
     else
     {

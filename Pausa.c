@@ -4,6 +4,7 @@
 #include "graficos.h"
 #include "mEstados.h"
 #include "tetris.h"
+#include "sonido.h"
 
 #define CANTIDAD_ELEMENTOS_MENU 3
 
@@ -78,15 +79,18 @@ void loop_logica_pausa()
         switch(pos_punteroP){
             case 0:
                 cambiar_contexto(PANTALLA_TETRIS);
+                audio_switch_loop();
                 break;
             case 1:
                 if(guardar_partida("partida.bin")){
                     cambiar_contexto(PANTALLA_MENU);
                 }
+                audio_stop_loop();
                 break;
             case 2:
                 remove("partida.bin");
                 cambiar_contexto(PANTALLA_MENU);
+                audio_stop_loop();
                 break;
         }
     }

@@ -7,6 +7,7 @@
 #include "puntos.h"
 #include "tetris.h"
 #include <stdbool.h>
+#include "sonido.h"
 
 int pos_punteroG = 0;
 
@@ -108,9 +109,11 @@ void loop_logica_perder()
             case 0:
                 inicializar_tetris(contexto->modo_tetris);
                 cambiar_contexto(PANTALLA_TETRIS);
+                audio_switch_loop();
                 break;
             case 1:
                 cambiar_contexto(PANTALLA_MENU);
+                audio_stop_loop();
                 break;
         }
     }

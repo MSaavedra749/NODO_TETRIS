@@ -57,10 +57,10 @@ Argumentos disponibles:
 - [x] mEstados.h
 - [x] opciones.c
 - [x] opciones.h
-- [ ] Pausa.c
-- [ ] Pausa.h
-- [ ] Perder.c
-- [ ] Perder.h
+- [x] Pausa.c
+- [x] Pausa.h
+- [x] Perder.c
+- [x] Perder.h
 - [x] piezas.c
 - [x] piezas.h
 - [x] pMenu.c

@@ -5,6 +5,7 @@
 #include "graficos.h"
 #include "tetris.h"
 #include "input.h"
+#include "sonido.h"
 
 
 #define CANTIDAD_ELEMENTOS_MENU 5
@@ -147,6 +148,11 @@ void prepararEstados(bool modo_dx)
         printf("Error al iniciar estados tetris");
         contexto->corriendo = false;
     }
+    if(!modo_dx)
+        audio_select_loop("Sonidos/themeA.mp3");
+    else
+        audio_select_loop("Sonidos/themeB.mp3");
+    //audio_switch_loop();
 }
 
 void shift_left(Tecla* tecla, int* cant, Tecla ent)
